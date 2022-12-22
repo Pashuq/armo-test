@@ -1,2 +1,2 @@
-export const HOST = "https://retoolapi.dev/WfgP40";
-export const USERS = "/users";
+export const HOST = "https://retoolapi.dev/Dgdu3R";
+export const USERS = "/data";

@@ -4,7 +4,7 @@ export interface IUser {
   lastName: string;
   email: string;
   access: string;
-  birthDate: string;
+  birthDate: number;
 }
 
 export interface IUsersSliceState {

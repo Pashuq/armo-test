@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 
 import { Order, IUser } from "../../types/index";
-import UsersTableHead from "../UsersTableHead";
+import UsersTableHead from "./UsersTableHead";
+import { UseTableSort } from "../../hooks/UseTableSort";
 
 interface IUserTableProps {
   rows: IUser[];
@@ -23,49 +24,13 @@ export default function UsersTable({ rows }: IUserTableProps) {
   const [page, setPage] = useState(0);
   const rowsPerPage = 10;
 
-  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
-
-  function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key
-  ): (
-    a: { [key in Key]: number | string },
-    b: { [key in Key]: number | string }
-  ) => number {
-    return order === "desc"
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
-  // This method is created for cross-browser compatibility, if you don't
-  // need to support IE11, you can use Array.prototype.sort() directly
-  function stableSort<T>(
-    array: readonly T[],
-    comparator: (a: T, b: T) => number
-  ) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) {
-        return order;
-      }
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-  }
+  const { getComparator, stableSort } = UseTableSort();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof IUser
   ) => {
+    console.log(property);
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -108,7 +73,11 @@ export default function UsersTable({ rows }: IUserTableProps) {
                       <TableCell align="left">{row.lastName}</TableCell>
                       <TableCell align="left">{row.email}</TableCell>
                       <TableCell align="left">{row.access}</TableCell>
-                      <TableCell align="left">{row.birthDate}</TableCell>
+                      <TableCell align="left">
+                        {new Date(row.birthDate).getDate()}.
+                        {new Date(row.birthDate).getMonth() + 1}.
+                        {new Date(row.birthDate).getFullYear()}
+                      </TableCell>
                     </TableRow>
                   );
                 })}

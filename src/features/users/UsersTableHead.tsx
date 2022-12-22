@@ -6,7 +6,7 @@ import {
   TableHead,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
-import { Order, IUser } from "../types";
+import { Order, IUser } from "../../types";
 
 interface EnhancedTableProps {
   numSelected: number;
