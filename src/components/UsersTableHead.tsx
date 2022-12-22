@@ -6,7 +6,6 @@ import {
   TableHead,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
-import { MouseEvent } from "react";
 import { Order, IUser } from "../types";
 
 interface EnhancedTableProps {
@@ -84,17 +83,7 @@ function UsersTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-            <Checkbox
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                "aria-label": "select all desserts",
-              }}
-            />
-          </TableCell> */}
+        <TableCell align="left">Edit</TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
