@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUsersSliceInitialState } from "../../types";
+import { IUsersSliceState } from "../../types";
 import { fetchAllUsers } from "./asyncUsersActions";
 
-const initialState: IUsersSliceInitialState = {
+const initialState: IUsersSliceState = {
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -31,6 +31,7 @@ const usersSlice = createSlice({
         state.message = action.payload as string;
       })
       .addCase(fetchAllUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.isSuccess = true;
         state.users = action.payload;
       });

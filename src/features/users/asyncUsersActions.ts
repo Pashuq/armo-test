@@ -1,14 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import usersService from "./usersService";
-import { IUser, IUsersSliceInitialState } from "../../types/index";
+import { IUser, IUsersSliceState } from "../../types/index";
 
 export const fetchAllUsers = createAsyncThunk<
   IUser[],
   undefined,
   {
     state: {
-      users: IUsersSliceInitialState;
+      users: IUsersSliceState;
     };
   }
 >(

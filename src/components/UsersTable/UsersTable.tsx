@@ -9,23 +9,19 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import { Order, IUser } from "../../types/index";
+import UsersTableHead from "../UsersTableHead";
 
-interface Data {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  access: string;
-  birthDate: string;
-}
+// interface UsersTableProps {
+//   id: number;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   access: string;
+//   birthDate: string;
+// }
 
 function createData(
   id: number,
@@ -34,7 +30,7 @@ function createData(
   email: string,
   access: string,
   birthDate: string
-): Data {
+): IUser {
   return {
     id,
     firstName,
@@ -71,8 +67,6 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-type Order = "asc" | "desc";
-
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key
@@ -102,157 +96,15 @@ function stableSort<T>(
   return stabilizedThis.map((el) => el[0]);
 }
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-  align: "right" | "left" | "center";
-}
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: "id",
-    numeric: true,
-    disablePadding: false,
-    label: "id",
-    align: "left",
-  },
-  {
-    id: "firstName",
-    numeric: false,
-    disablePadding: false,
-    label: "firstName",
-    align: "left",
-  },
-  {
-    id: "lastName",
-    numeric: false,
-    disablePadding: false,
-    label: "lastName",
-    align: "left",
-  },
-  {
-    id: "email",
-    numeric: false,
-    disablePadding: false,
-    label: "email",
-    align: "left",
-  },
-  {
-    id: "access",
-    numeric: false,
-    disablePadding: false,
-    label: "access",
-    align: "left",
-  },
-
-  {
-    id: "birthDate",
-    numeric: false,
-    disablePadding: false,
-    label: "birthDate",
-    align: "left",
-  },
-];
-
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
-  return (
-    <TableHead>
-      <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-        </TableCell> */}
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.align}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-      }}
-    >
-      <Typography
-        sx={{ flex: "1 1 100%" }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
-        User list
-      </Typography>
-
-      <Tooltip title="Filter list">
-        <IconButton>
-          <FilterListIcon />
-        </IconButton>
-      </Tooltip>
-    </Toolbar>
-  );
-}
-
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("firstName");
+  const [orderBy, setOrderBy] = React.useState<keyof IUser>("firstName");
   const [page, setPage] = React.useState(0);
   const rowsPerPage = 10;
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: keyof IUser
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -276,7 +128,7 @@ export default function EnhancedTable() {
             aria-labelledby="tableTitle"
             size={"medium"}
           >
-            <EnhancedTableHead
+            <UsersTableHead
               numSelected={0}
               order={order}
               orderBy={orderBy}

@@ -7,10 +7,12 @@ export interface IUser {
   birthDate: string;
 }
 
-export interface IUsersSliceInitialState {
+export interface IUsersSliceState {
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
   message: string;
   users: IUser[];
 }
+
+export type Order = "asc" | "desc";

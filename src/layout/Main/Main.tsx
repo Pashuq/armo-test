@@ -1,8 +1,9 @@
-import { Container } from "@mui/material";
 import { useEffect } from "react";
-import UsersTable from "../../components/UsersTable/UsersTable";
+import { Container } from "@mui/material";
+
 import { useAppDispatch } from "../../redux-hooks";
 import { fetchAllUsers } from "../../features/users/asyncUsersActions";
+import UsersFeature from "../../features/users/UsersFeature";
 
 function Main() {
   const dispatch = useAppDispatch();
@@ -10,9 +11,10 @@ function Main() {
   useEffect(() => {
     dispatch(fetchAllUsers());
   }, []);
+
   return (
     <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="lg">
-      <UsersTable />
+      <UsersFeature />
     </Container>
   );
 }
