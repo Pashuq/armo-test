@@ -3,7 +3,6 @@ import { Skeleton } from "@mui/material";
 
 import UsersTable from "./UsersTable";
 import { selectUsersState } from "./usersSelectors";
-import { IUser } from "../../types";
 
 function UsersFeature() {
   const { users, isError, isLoading, isSuccess } =

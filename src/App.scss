@@ -2,3 +2,8 @@ body {
     font-family: 'Roboto';
 }
 
+a:-webkit-any-link  {
+    text-decoration: none;
+    color: inherit;
+}
+

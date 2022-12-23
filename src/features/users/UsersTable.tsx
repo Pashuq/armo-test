@@ -13,6 +13,7 @@ import {
 import { Order, IUser } from "../../types/index";
 import UsersTableHead from "./UsersTableHead";
 import { UseTableSort } from "../../hooks/UseTableSort";
+import { UseTransformDateNumberToString } from "../../hooks/UseTransformDateNumberToString";
 
 interface IUserTableProps {
   rows: IUser[];
@@ -25,6 +26,8 @@ export default function UsersTable({ rows }: IUserTableProps) {
   const rowsPerPage = 10;
 
   const { getComparator, stableSort } = UseTableSort();
+
+  const transformBirthDate = UseTransformDateNumberToString();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -74,9 +77,7 @@ export default function UsersTable({ rows }: IUserTableProps) {
                       <TableCell align="left">{row.email}</TableCell>
                       <TableCell align="left">{row.access}</TableCell>
                       <TableCell align="left">
-                        {new Date(row.birthDate).getDate()}.
-                        {new Date(row.birthDate).getMonth() + 1}.
-                        {new Date(row.birthDate).getFullYear()}
+                        {transformBirthDate(row.birthDate)}
                       </TableCell>
                     </TableRow>
                   );
