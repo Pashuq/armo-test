@@ -1,6 +1,8 @@
 import { useState } from "react";
 import {
   Box,
+  Button,
+  ButtonGroup,
   Paper,
   Table,
   TableBody,
@@ -8,12 +10,17 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 
 import { Order, IUser } from "../../types/index";
 import UsersTableHead from "./UsersTableHead";
 import { UseTableSort } from "../../hooks/UseTableSort";
 import { UseTransformDateNumberToString } from "../../hooks/UseTransformDateNumberToString";
+import { Delete, Edit } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { useAppDispatch } from "../../redux-hooks";
+import { deleteUserById } from "./asyncUsersActions";
 
 interface IUserTableProps {
   rows: IUser[];
@@ -25,6 +32,8 @@ export default function UsersTable({ rows }: IUserTableProps) {
   const [page, setPage] = useState(0);
   const rowsPerPage = 10;
 
+  const dispatch = useAppDispatch();
+
   const { getComparator, stableSort } = UseTableSort();
 
   const transformBirthDate = UseTransformDateNumberToString();
@@ -33,7 +42,6 @@ export default function UsersTable({ rows }: IUserTableProps) {
     event: React.MouseEvent<unknown>,
     property: keyof IUser
   ) => {
-    console.log(property);
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -41,6 +49,10 @@ export default function UsersTable({ rows }: IUserTableProps) {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+  };
+
+  const handleDeleteUser = (id: number) => {
+    dispatch(deleteUserById({ id: String(id) }));
   };
 
   return (
@@ -68,7 +80,48 @@ export default function UsersTable({ rows }: IUserTableProps) {
 
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      <TableCell align="left">Edit</TableCell>
+                      <TableCell align="center">
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: "1em",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <ButtonGroup
+                            variant="outlined"
+                            aria-label="outlined button group"
+                          ></ButtonGroup>
+                          <Tooltip title="Delete">
+                            <Button
+                              onClick={() => {
+                                handleDeleteUser(row.id);
+                              }}
+                            >
+                              <Delete
+                                sx={{
+                                  cursor: "pointer",
+                                  height: "20px",
+                                  width: "20px",
+                                }}
+                              />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip title="Edit">
+                            <Link to={`/user/${row.id}`}>
+                              <Button>
+                                <Edit
+                                  sx={{
+                                    cursor: "pointer",
+                                    height: "20px",
+                                    width: "20px",
+                                  }}
+                                />
+                              </Button>
+                            </Link>
+                          </Tooltip>
+                        </Box>
+                      </TableCell>
                       <TableCell align="left">{row.id}</TableCell>
                       <TableCell component="th" id={labelId} scope="row">
                         {row.firstName}

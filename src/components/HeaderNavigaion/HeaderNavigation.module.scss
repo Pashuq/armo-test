@@ -1,4 +1,9 @@
 .headnav {
     display: flex;
     gap: 1em;
+    .active {
+        text-decoration: underline;
+    }
 }
+
+

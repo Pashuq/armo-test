@@ -83,7 +83,7 @@ function UsersTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell align="left">Edit</TableCell>
+        <TableCell align="center">actions </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}

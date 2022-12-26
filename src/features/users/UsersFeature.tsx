@@ -1,12 +1,21 @@
-import { useAppSelector } from "../../redux-hooks";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux-hooks";
 import { Skeleton } from "@mui/material";
 
 import UsersTable from "./UsersTable";
 import { selectUsersState } from "./usersSelectors";
+import { fetchAllUsers } from "./asyncUsersActions";
+import TableSkeleton from "../../components/TableSkeleton/TableSkeleton";
 
 function UsersFeature() {
-  const { users, isError, isLoading, isSuccess } =
+  const dispatch = useAppDispatch();
+
+  const { users, isError, isLoading, isSuccess, message } =
     useAppSelector(selectUsersState);
+
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+  }, []);
 
   const rows = users.map((user) => {
     return {
@@ -18,11 +27,10 @@ function UsersFeature() {
 
   return (
     <>
-      {isLoading ? (
-        <Skeleton variant="rectangular" width="100%" height={"656px"} />
-      ) : (
-        <UsersTable rows={rows} />
-      )}
+      {isLoading && <TableSkeleton />}
+      {users.length === 0 && isSuccess && <p>users not found</p>}
+      {isError && <p>{message}</p>}
+      {isSuccess && <UsersTable rows={rows} />}
     </>
   );
 }
